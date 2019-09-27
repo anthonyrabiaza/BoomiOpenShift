@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: atom-deployment
+  labels:
+    app: atom
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: atom
+  template:
+    metadata:
+      labels:
+        app: atom
+        env: development
+        team: dell-boomi
+    spec:
+      containers:
+      - name: atom-container
+        image: anthonyrabiaza/openshift-boomi-atom:1.0
+        resources:
+          limits:
+            cpu: 1
+          requests:
+            cpu: 1
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 9090
+        env:
+        - name: URL
+          value: https://platform.boomi.com
+        - name: BOOMI_USERNAME
+          value: @@@@REPLACEME@@@@
+        - name: BOOMI_PASSWORD
+          value: @@@@REPLACEME@@@@
+        - name: BOOMI_ACCOUNTID
+          value: @@@@REPLACEME@@@@
+        - name: BOOMI_ATOMNAME
+          value: Pod
+        - name: BOOMI_CONTAINERNAME
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
+        - name: ATOM_LOCALHOSTID
+          value: $(BOOMI_ATOMNAME)
+        - name: INSTALLATION_DIRECTORY
+          value: /home/boomi
