@@ -1,0 +1,12 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: molecule-service
+spec:
+  selector:
+    app: molecule
+  ports:
+  - name: http
+    protocol: TCP
+    port: 9090
+    targetPort: 9090

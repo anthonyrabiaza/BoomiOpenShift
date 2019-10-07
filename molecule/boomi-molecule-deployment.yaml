@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: molecule-deployment
+  labels:
+    app: molecule
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: molecule
+  template:
+    metadata:
+      labels:
+        app: molecule
+        env: test
+        team: dell-boomi
+    spec:
+      containers:
+      - name: molecule-container
+        image: anthonyrabiaza/openshift-boomi-molecule:1.0
+        resources:
+          limits:
+            cpu: 1
+          requests:
+            cpu: 1
+        volumeMounts:
+        - mountPath: /var/boomi
+          name: boomi-shared-folder
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 9090
+        env:
+        - name: URL
+          value: https://platform.boomi.com
+        - name: BOOMI_USERNAME
+          value: @@@@REPLACEME@@@@
+        - name: BOOMI_PASSWORD
+          value: @@@@REPLACEME@@@@
+        - name: BOOMI_ACCOUNTID
+          value: @@@@REPLACEME@@@@
+        - name: BOOMI_ATOMNAME
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
+        - name: BOOMI_CONTAINERNAME
+          value: redhat_openshift
+        - name: ATOM_LOCALHOSTID
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
+        - name: INSTALLATION_DIRECTORY
+          value: /var/boomi
+      volumes:
+      - name: boomi-shared-folder
+        persistentVolumeClaim:
+          claimName: "dell-boomi-claim"
