@@ -4,6 +4,10 @@ The deployment of the Atom on OpenShift is using a slightly different version of
 
 I created a custom image to cope with the different constraints and allow the deployment of an Atom in OpenShift:  https://cloud.docker.com/repository/docker/anthonyrabiaza/openshift-boomi-atom/general
 
+![](resources/openshift.png)
+
+
+
 # Deployment of the Service
 
 Connect to OpenShift Console and select Networking>Services
